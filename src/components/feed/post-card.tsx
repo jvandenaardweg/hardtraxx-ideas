@@ -254,22 +254,22 @@ function CompactView({
   const TypeIcon = postTypeConfig[post.type].icon
 
   return (
-    <article className="flex items-center gap-3 border-b border-border py-2 hover:bg-card/50 transition-colors px-2 -mx-2 rounded">
+    <article className="grid grid-cols-[50px_24px_1fr_60px_100px_40px] items-center gap-3 border-b border-border py-2 hover:bg-card/50 transition-colors px-2 -mx-2 rounded">
       {/* Votes */}
-      <div className="flex w-12 shrink-0 flex-col items-center text-sm">
+      <div className="flex flex-col items-center text-sm">
         <ChevronUp className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-pointer" />
         <span className="font-medium">{formatNumber(post.upvotes)}</span>
       </div>
 
       {/* Type Icon */}
-      <span className={cn('shrink-0', postTypeConfig[post.type].color)}>
+      <span className={cn('flex justify-center', postTypeConfig[post.type].color)}>
         <TypeIcon className="h-4 w-4" />
       </span>
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <Link to="/post/$postId" params={{ postId: post.id }} className="truncate">
+          <Link to="/post/$postId" params={{ postId: post.id }} className="truncate flex-1 min-w-0">
             <h3 className="truncate font-medium hover:text-primary cursor-pointer">
               {post.title}
             </h3>
@@ -287,23 +287,27 @@ function CompactView({
       </div>
 
       {/* Comments */}
-      <Link to="/post/$postId" params={{ postId: post.id }} className="flex items-center gap-1 text-sm text-muted-foreground shrink-0 hover:text-foreground transition-colors">
+      <Link to="/post/$postId" params={{ postId: post.id }} className="flex items-center justify-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
         <MessageSquare className="h-4 w-4" />
-        {post.commentCount}
+        <span>{post.commentCount}</span>
       </Link>
 
       {/* Author & Time */}
-      <div className="hidden sm:block text-xs text-muted-foreground shrink-0 w-24 text-right">
-        <span className="hover:text-foreground cursor-pointer">@{post.author.username}</span>
+      <div className="hidden sm:block text-xs text-muted-foreground text-right">
+        <span className="hover:text-foreground cursor-pointer block truncate">@{post.author.username}</span>
         <span className="block">{formatRelativeTime(post.createdAt)}</span>
       </div>
 
       {/* Play button */}
-      {post.embed && (
-        <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8" onClick={onPlay}>
-          <Play className="h-4 w-4" />
-        </Button>
-      )}
+      <div className="flex justify-center">
+        {post.embed ? (
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onPlay}>
+            <Play className="h-4 w-4" />
+          </Button>
+        ) : (
+          <div className="h-8 w-8" /> 
+        )}
+      </div>
     </article>
   )
 }
